@@ -9,6 +9,7 @@ import api from '../../services/api';
 import Header from '../../components/Header';
 
 import formatValue from '../../utils/formatValue';
+import formatDate from '../../utils/formatDate';
 
 import { Container, CardContainer, Card, TableContainer } from './styles';
 
@@ -35,7 +36,6 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
-      // TODO
       const response = await api.get('transactions');
       setTransactions(response.data.transactions);
       setBalance(response.data.balance);
@@ -43,8 +43,6 @@ const Dashboard: React.FC = () => {
 
     loadTransactions();
   }, []);
-
-  console.log(balance);
 
   return (
     <>
@@ -56,9 +54,7 @@ const Dashboard: React.FC = () => {
               <p>Entradas</p>
               <img src={income} alt="Income" />
             </header>
-            <h1 data-testid="balance-income">
-              {`R$ ${formatValue(balance.income)}`}
-            </h1>
+            <h1 data-testid="balance-income">{formatValue(balance.income)}</h1>
           </Card>
           <Card>
             <header>
@@ -66,7 +62,7 @@ const Dashboard: React.FC = () => {
               <img src={outcome} alt="Outcome" />
             </header>
             <h1 data-testid="balance-outcome">
-              {`R$ ${formatValue(balance.outcome)}`}
+              {formatValue(balance.outcome)}
             </h1>
           </Card>
           <Card total>
@@ -74,9 +70,7 @@ const Dashboard: React.FC = () => {
               <p>Total</p>
               <img src={total} alt="Total" />
             </header>
-            <h1 data-testid="balance-total">
-              {`R$ ${formatValue(balance.total)}`}
-            </h1>
+            <h1 data-testid="balance-total">{formatValue(balance.total)}</h1>
           </Card>
         </CardContainer>
 
@@ -97,10 +91,10 @@ const Dashboard: React.FC = () => {
                   <td className="title">{transaction.title}</td>
                   <td className={transaction.type}>
                     {transaction.type === 'outcome' ? ' - ' : ''}
-                    {`${formatValue(transaction.value)}`}
+                    {formatValue(transaction.value)}
                   </td>
                   <td>{transaction.category.title}</td>
-                  <td>{transaction.created_at}</td>
+                  <td>{formatDate(transaction.created_at)}</td>
                 </tr>
               ))}
             </tbody>
